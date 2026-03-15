@@ -25,7 +25,7 @@ Create a short daily plan:
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
       {
-        model: "llama3-70b-8192",
+        model: "llama-3.1-8b-instant",
         messages: [
           {
             role: "user",
@@ -35,7 +35,7 @@ Create a short daily plan:
       },
       {
         headers: {
-          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
           "Content-Type": "application/json"
         }
       }
