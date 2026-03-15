@@ -6,20 +6,33 @@ const generatePlan = async (req, res) => {
     const { energyLevel, tasks, meals } = req.body;
 
     const prompt = `
-You are an AI life-load assistant.
+You are an AI life assistant.
 
 Energy level today: ${energyLevel}
 
 Tasks:
 ${tasks.map(t => "- " + t.title).join("\n")}
 
-Meals available:
+Available meals:
 ${meals.map(m => "- " + m.name).join("\n")}
 
-Create a short daily plan:
-1. Prioritize tasks
-2. Suggest one meal
-3. Give short productivity advice
+Return ONLY valid JSON in this format:
+
+{
+  "taskPriority": [
+    "task1",
+    "task2",
+    "task3"
+  ],
+  "mealSuggestion": {
+    "name": "meal name",
+    "reason": "short reason",
+    "prepTime": "time in minutes"
+  },
+  "advice": "short productivity advice"
+}
+
+Do not return anything except JSON.
 `;
 
     const response = await axios.post(
@@ -27,10 +40,7 @@ Create a short daily plan:
       {
         model: "llama-3.1-8b-instant",
         messages: [
-          {
-            role: "user",
-            content: prompt
-          }
+          { role: "user", content: prompt }
         ]
       },
       {
@@ -41,11 +51,11 @@ Create a short daily plan:
       }
     );
 
-    const aiResponse = response.data.choices[0].message.content;
+    const aiText = response.data.choices[0].message.content;
 
-    res.json({
-      aiPlan: aiResponse
-    });
+    const parsed = JSON.parse(aiText);
+
+    res.json(parsed);
 
   } catch (error) {
 
