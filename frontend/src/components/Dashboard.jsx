@@ -5,30 +5,37 @@ function Dashboard() {
 
   const [data, setData] = useState(null);
   const [meal, setMeal] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
     const loadDashboard = async () => {
+      try {
 
-      const calendarRes = await fetch("http://localhost:5000/api/calendar");
-      const calendarData = await calendarRes.json();
+        const calendarRes = await fetch("http://localhost:5000/api/calendar");
+        const calendarData = await calendarRes.json();
 
-      setData(calendarData);
+        setData(calendarData);
 
-      const aiRes = await fetch("http://localhost:5000/api/ai/plan", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          energyLevel: calendarData.energyLevel
-        })
-      });
+        const aiRes = await fetch("http://localhost:5000/api/ai/plan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            energyLevel: calendarData.energyLevel
+          })
+        });
 
-      const aiData = await aiRes.json();
+        const aiData = await aiRes.json();
 
-      setMeal(aiData.mealSuggestion);
+        setMeal(aiData.mealSuggestion);
 
+        setLoading(false);
+
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     loadDashboard();
@@ -42,7 +49,7 @@ function Dashboard() {
 
       <div className="grid grid-cols-4 gap-6">
 
-        {!data ? (
+        {loading ? (
           <>
             <SkeletonCard />
             <SkeletonCard />
@@ -78,19 +85,17 @@ function Dashboard() {
       {/* AI Meal Suggestion */}
 
       <div className="bg-primary shadow rounded-xl p-5">
-
         <h2 className="text-lg font-semibold">Meal Suggestion</h2>
 
-        {!meal ? (
-          <p className="text-text mt-2">Generating suggestion...</p>
-        ) : (
+        {meal ? (
           <>
             <p className="mt-2 text-xl font-semibold">{meal.name}</p>
             <p className="text-text">Prep Time: {meal.prepTime} mins</p>
-            <p className="text-text text-sm mt-1">{meal.reason}</p>
+            <p className="text-text text-sm">{meal.reason}</p>
           </>
+        ) : (
+          <p className="text-text mt-2">Generating AI suggestion...</p>
         )}
-
       </div>
 
       <div className="bg-primary shadow rounded-xl p-5">

@@ -7,8 +7,7 @@ const generateMeals = async (req, res) => {
 
   const prompt = `
 Generate 3 meal suggestions for someone with ${energyLevel} energy today.
-
-Return JSON only:
+Do not return anything except JSON. Do not send null data. Suggest Indian meals and don't send single answers like Eggs.
 
 {
  "meals":[
