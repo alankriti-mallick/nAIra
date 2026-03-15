@@ -8,6 +8,7 @@ const calendarRoutes = require("./routes/calendarRoutes");
 const mealRoutes = require("./routes/mealRoutes");
 const groceryRoutes = require("./routes/groceryRoutes");
 const taskRoutes = require("./routes/taskRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use("/api/calendar", calendarRoutes);
 app.use("/api/meals", mealRoutes);
 app.use("/api/groceries", groceryRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server running on port", process.env.PORT);
