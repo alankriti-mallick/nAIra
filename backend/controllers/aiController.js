@@ -9,7 +9,11 @@ const generatePlan = async (req, res) => {
     const prompt = `
 You are an AI life assistant.
 
-Energy level today: ${energyLevel}
+Your job is to analyze the user's energy level, tasks, and available meals
+and generate productivity insights.
+
+Energy level today:
+${energyLevel}
 
 Tasks:
 ${tasks.length ? tasks.map((t) => "- " + t.title).join("\n") : "No tasks provided"}
@@ -17,7 +21,20 @@ ${tasks.length ? tasks.map((t) => "- " + t.title).join("\n") : "No tasks provide
 Meals available:
 ${meals.length ? meals.map((m) => "- " + m.name).join("\n") : "No meals provided"}
 
-Return ONLY valid JSON in this format:
+IMPORTANT RULES:
+- Return ONLY valid JSON
+- Do NOT include markdown
+- Do NOT include explanations
+- Do NOT include text before or after the JSON
+- Do NOT wrap JSON in \`\`\`
+- Do NOT return null
+- timeSaved MUST be a NUMBER
+- mealSuggestion MUST pick the most optimal meal from the provided meals list
+- taskPriority MUST contain task names from the provided tasks list
+- If tasks are empty return an empty array []
+- If meals are empty still return mealSuggestion with a reasonable quick meal
+
+Return EXACTLY this JSON structure:
 
 {
   "taskPriority": [
@@ -30,10 +47,11 @@ Return ONLY valid JSON in this format:
     "reason": "short reason",
     "prepTime": "time in minutes"
   },
-  "advice": "short productivity advice"
+  "advice": "short productivity advice",
+  "timeSaved": 35
 }
 
-Do not return anything except JSON. Do not send null data. Suggest Indian meals and don't send single answers like Eggs.
+The output MUST strictly follow this schema.
 `;
 
     const response = await axios.post(
@@ -50,11 +68,33 @@ Do not return anything except JSON. Do not send null data. Suggest Indian meals 
       },
     );
 
-    const aiText = response.data.choices[0].message.content;
+    const text = response.data.choices[0].message.content;
 
-    const parsed = JSON.parse(aiText);
+    const cleaned = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
 
-    res.json(parsed);
+    let result;
+
+    try {
+      result = JSON.parse(cleaned);
+    } catch (err) {
+      console.error("AI JSON parse failed:", cleaned);
+
+      result = {
+        taskPriority: [],
+        mealSuggestion: {
+          name: "Simple Sandwich",
+          reason: "Fallback meal",
+          prepTime: "10",
+        },
+        advice: "Take things slowly today.",
+        timeSaved: 10,
+      };
+    }
+
+    res.json(result);
   } catch (error) {
     console.error(error.response?.data || error.message);
 
