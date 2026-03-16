@@ -1,24 +1,18 @@
 const mongoose = require("mongoose");
 
-const grocerySchema = new mongoose.Schema({
-
-  mealId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Meal"
+const GrocerySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
   },
-
-  items: [
-    {
-      name: String,
-      quantity: String
-    }
-  ],
-
+  quantity: {
+    type: String,
+    default: "1"
+  },
   createdAt: {
     type: Date,
     default: Date.now
   }
-
 });
 
-module.exports = mongoose.model("Grocery", grocerySchema);
+module.exports = mongoose.model("Grocery", GrocerySchema);

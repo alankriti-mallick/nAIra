@@ -1,106 +1,41 @@
 const Grocery = require("../models/Grocery");
-const Meal = require("../models/Meal");
 
 
-/*
-CREATE GROCERY LIST FROM MEAL
-POST /api/groceries
-*/
-const createGroceryList = async (req, res) => {
-
-  try {
-
-    const { mealId } = req.body;
-
-    const meal = await Meal.findById(mealId);
-
-    if (!meal) {
-      return res.status(404).json({ message: "Meal not found" });
-    }
-
-    const grocery = new Grocery({
-      mealId: meal._id,
-      items: meal.ingredients.map(item => ({
-        name: item,
-        quantity: "1 unit"
-      }))
-    });
-
-    const savedGrocery = await grocery.save();
-
-    res.status(201).json(savedGrocery);
-
-  } catch (error) {
-    res.status(500).json({ message: "Failed to create grocery list", error });
-  }
-
-};
-
-
-/*
-GET ALL GROCERY LISTS
-GET /api/groceries
-*/
+// GET ALL GROCERIES
 const getGroceries = async (req, res) => {
-
-  try {
-
-    const groceries = await Grocery.find().populate("mealId");
-
-    res.json(groceries);
-
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch groceries" });
-  }
-
+  const groceries = await Grocery.find().sort({ createdAt: -1 });
+  res.json(groceries);
 };
 
 
-/*
-GET SINGLE GROCERY LIST
-GET /api/groceries/:id
-*/
-const getGroceryById = async (req, res) => {
+// ADD GROCERY
+const addGrocery = async (req, res) => {
 
-  try {
+  const { name, quantity } = req.body;
 
-    const grocery = await Grocery.findById(req.params.id).populate("mealId");
+  const item = new Grocery({
+    name,
+    quantity
+  });
 
-    if (!grocery) {
-      return res.status(404).json({ message: "Grocery list not found" });
-    }
+  await item.save();
 
-    res.json(grocery);
-
-  } catch (error) {
-    res.status(500).json({ message: "Fetch failed" });
-  }
-
+  res.json(item);
 };
 
 
-/*
-DELETE GROCERY LIST
-DELETE /api/groceries/:id
-*/
+// DELETE GROCERY
 const deleteGrocery = async (req, res) => {
 
-  try {
+  const { id } = req.params;
 
-    await Grocery.findByIdAndDelete(req.params.id);
+  await Grocery.findByIdAndDelete(id);
 
-    res.json({ message: "Grocery list deleted" });
-
-  } catch (error) {
-    res.status(500).json({ message: "Delete failed" });
-  }
-
+  res.json({ message: "Deleted successfully" });
 };
 
-
 module.exports = {
-  createGroceryList,
   getGroceries,
-  getGroceryById,
+  addGrocery,
   deleteGrocery
 };
