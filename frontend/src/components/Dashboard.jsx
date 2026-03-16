@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SkeletonCard from "./SkeletonCard";
+import { getTasks } from "../services/api";
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -33,8 +34,13 @@ function Dashboard() {
         const aiMealData = await aiMealRes.json();
         setMeals(aiMealData);
 
+        // GET TASKS FROM TASK LIST AND SORT BY PRIORITY
+        const allTasks = await getTasks();
+        const incompleteTasks = allTasks.filter(task => !task.completed);
+        const sortedTasks = incompleteTasks.sort((a, b) => b.priority - a.priority);
+        setTasks(sortedTasks);
 
-        // GET DASHBOARD DATA BASED ON MEALS AND ENERGY LEVEL AND TASKS
+        // GET DASHBOARD DATA BASED ON MEALS AND ENERGY LEVEL
         const aiRes = await fetch("http://localhost:5000/api/ai/plan", {
           method: "POST",
           headers: {
@@ -49,7 +55,6 @@ function Dashboard() {
         const aiData = await aiRes.json();
 
         setMeal(aiData.mealSuggestion);
-        setTasks(aiData.taskPriority || []);
         setAdvice(aiData.advice || []);
         setTimeSaved(aiData.timeSaved || 0);
 
@@ -142,11 +147,20 @@ function Dashboard() {
             <SkeletonCard />
           ) : (
             <ul className="mt-2 space-y-2">
-              {tasks.map((task, index) => (
-                <li key={index} className="bg-white p-2 rounded text-sm">
-                  {index + 1}. {task}
-                </li>
-              ))}
+              {tasks.length > 0 ? (
+                tasks.slice(0, 3).map((task, index) => {
+                  const priorityLabel = task.priority === 3 ? "High" : task.priority === 2 ? "Medium" : "Low";
+                  const priorityColor = task.priority === 3 ? "bg-red-100 text-red-800" : task.priority === 2 ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800";
+                  return (
+                    <li key={task._id} className="bg-white p-2 rounded text-sm flex justify-between items-center">
+                      <span>{index + 1}. {task.title}</span>
+                      <span className={`text-xs px-2 py-1 rounded ${priorityColor}`}>{priorityLabel}</span>
+                    </li>
+                  );
+                })
+              ) : (
+                <p className="text-text text-sm">No tasks available</p>
+              )}
             </ul>
           )}
         </div>
