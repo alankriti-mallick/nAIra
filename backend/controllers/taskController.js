@@ -87,10 +87,36 @@ const deleteTask = async (req, res) => {
 
 };
 
+/*
+UPDATE TASK
+PUT /api/tasks/edit/:id
+*/
+const updateTask = async (req, res) => {
+
+  try {
+
+    const { title, priority, deadline } = req.body;
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      { title, priority, deadline },
+      { new: true }
+    );
+
+    res.json(updatedTask);
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Task update failed" });
+
+  }
+
+};
 
 module.exports = {
   createTask,
   getTasks,
   completeTask,
-  deleteTask
+  deleteTask,
+  updateTask
 };
