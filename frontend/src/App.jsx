@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
@@ -12,10 +12,12 @@ function App() {
       <Sidebar />
       <div className="flex-1 p-6 bg-dark-bg min-h-screen">
         <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/meals" element={<MealSuggestion />} />
           <Route path="/groceries" element={<GroceryList />} />
           <Route path="/tasks" element={<TaskList />} />
+
         </Routes>
       </div>
     </div>
