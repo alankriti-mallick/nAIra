@@ -94,35 +94,4 @@ module.exports = {
 };
 
 
-// const Meal = require("../models/Meal");
-
-// const addMeal = async (req, res) => {
-
-//   try {
-
-//     const meal = new Meal(req.body);
-
-//     await meal.save();
-
-//     res.json(meal);
-
-//   } catch (error) {
-
-//     res.status(500).json({ error: "Failed to create meal" });
-
-//   }
-
-// };
-
-// const getMeals = async (req, res) => {
-
-//   const meals = await Meal.find();
-
-//   res.json(meals);
-
-// };
-
-// module.exports = { addMeal, getMeals };
-
-
 

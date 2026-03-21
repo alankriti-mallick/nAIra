@@ -67,110 +67,159 @@ function TaskList() {
   };
 
   return (
-    <div className="space-y-6">
+  <div className="relative min-h-screen text-white">
 
-      <h1 className="text-3xl font-bold">Task List</h1>
+    {/* 🌌 Aurora */}
+    <div className="aurora-container">
+      <div className="aurora aurora1"></div>
+      <div className="aurora aurora2"></div>
+      <div className="aurora aurora3"></div>
+    </div>
 
-      <div className="bg-white shadow rounded-xl p-6">
+    <div className="relative z-10 p-6 space-y-6">
 
-        <div className="flex gap-2 mb-6">
+      <h1 className="text-3xl font-bold">Task List 📋</h1>
 
-          <input
-            value={title}
-            onChange={(e)=>setTitle(e.target.value)}
-            className="border p-2 rounded w-full"
-            placeholder="Task title"
-          />
+      {/* ✨ ADD / EDIT TASK */}
+      <div className="bg-primary backdrop-blur-lg p-5 rounded-xl shadow flex flex-wrap gap-3 items-center">
 
-          <select
-            value={priority}
-            onChange={(e)=>setPriority(Number(e.target.value))}
-            className="border p-2 rounded"
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Add a task... ✨"
+          className="bg-white/20 p-3 rounded-lg outline-none w-64 
+                     focus:ring-2 focus:ring-pink-300 transition"
+        />
+
+        <select
+          value={priority}
+          onChange={(e) => setPriority(Number(e.target.value))}
+          className="bg-primary text-white p-3 rounded-lg outline-none 
+           focus:ring-2 focus:ring-pink-300 transition"
+        >
+          <option value={1} className="text-black bg-white">Low</option>
+          <option value={2} className="text-black bg-white">Medium</option>
+          <option value={3} className="text-black bg-white">High</option>
+        </select>
+
+        {editingId ? (
+          <button
+            onClick={saveEdit}
+            className="bg-button px-4 py-2 rounded-lg shadow hover:scale-105 transition"
           >
-            <option value={1}>Low</option>
-            <option value={2}>Medium</option>
-            <option value={3}>High</option>
-          </select>
+            Save ✨
+          </button>
+        ) : (
+          <button
+            onClick={addTask}
+            className="bg-button px-4 py-2 rounded-lg shadow hover:scale-105 transition"
+          >
+            Add
+          </button>
+        )}
 
-          {editingId ? (
-            <button
-              onClick={saveEdit}
-              className="bg-yellow-500 text-white px-4 rounded"
-            >
-              Update
-            </button>
-          ) : (
-            <button
-              onClick={addTask}
-              className="bg-green-500 text-white px-4 rounded"
-            >
-              Add
-            </button>
-          )}
+      </div>
 
+      {/* 🌸 EMPTY STATE */}
+      {tasks.length === 0 && (
+        <div className="text-center text-text mt-10">
+          <p className="text-lg">✨ No tasks yet</p>
+          <p className="text-sm mt-2">
+            Add tasks and let AI organize your day 💡
+          </p>
         </div>
+      )}
 
-        <ul className="space-y-4">
+      {/* 📦 TASK CARDS */}
+      <div className="grid grid-cols-2 gap-6">
 
-          {tasks.map((task) => (
+        {tasks.map((task, index) => {
 
-            <li
+          const priorityLabel =
+            task.priority === 3
+              ? "High"
+              : task.priority === 2
+              ? "Medium"
+              : "Low";
+
+          const priorityColor =
+            task.priority === 3
+              ? "bg-[#D14D72]"
+              : task.priority === 2
+              ? "bg-[#FFABAB]"
+              : "bg-[#FCC8D1]";
+
+          return (
+            <div
               key={task._id}
-              className="flex items-center justify-between border-b pb-2"
+              style={{ animationDelay: `${index * 0.08}s` }}
+              className="animate-fadeIn bg-primary backdrop-blur-lg p-5 rounded-xl shadow 
+                         hover:scale-105 hover:shadow-xl transition duration-300 
+                         border border-white/10 relative overflow-hidden"
             >
 
-              <div>
+              {/* Glow (non-blocking) */}
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-200/10 to-purple-200/10 opacity-0 hover:opacity-100 transition pointer-events-none"></div>
 
-                <span className={task.completed ? "line-through" : ""}>
-                  {task.title}
+              {/* Title */}
+              <h2 className="font-semibold text-lg flex items-center gap-2">
+                📝 {task.title}
+              </h2>
+
+              {/* Priority + Status */}
+              <div className="mt-3 flex justify-between items-center">
+
+                <span className={`text-xs px-3 py-1 rounded-full ${priorityColor}`}>
+                  {priorityLabel}
                 </span>
 
-                <div className="text-sm text-gray-500">
-                  Priority:
-                  {task.priority === 3 && " 🔴 High"}
-                  {task.priority === 2 && " 🟠 Medium"}
-                  {task.priority === 1 && " 🟢 Low"}
-                </div>
+                <span className="text-sm text-text">
+                  {task.completed ? "✅ Done" : "⏳ Pending"}
+                </span>
 
               </div>
 
-              <div className="space-x-2">
+              {/* ACTIONS */}
+              <div className="flex gap-2 mt-4">
 
                 {!task.completed && (
                   <button
-                    onClick={()=>markDone(task._id)}
-                    className="text-sm bg-blue-500 text-white px-3 py-1 rounded"
+                    onClick={() => markDone(task._id)}
+                    className="text-sm bg-green-400/80 px-3 py-1 rounded-lg 
+                               hover:scale-105 transition"
                   >
-                    Done
+                    Done ✅
                   </button>
                 )}
 
                 <button
-                  onClick={()=>startEdit(task)}
-                  className="text-sm bg-yellow-500 text-white px-3 py-1 rounded"
+                  onClick={() => startEdit(task)}
+                  className="text-sm bg-yellow-300/80 px-3 py-1 rounded-lg 
+                             hover:scale-105 transition"
                 >
-                  Edit
+                  Edit ✏️
                 </button>
 
                 <button
-                  onClick={()=>removeTask(task._id)}
-                  className="text-sm bg-red-500 text-white px-3 py-1 rounded"
+                  onClick={() => removeTask(task._id)}
+                  className="text-sm bg-red-400/80 px-3 py-1 rounded-lg 
+                             hover:scale-105 transition"
                 >
-                  Delete
+                  Delete ❌
                 </button>
 
               </div>
 
-            </li>
+            </div>
+          );
 
-          ))}
-
-        </ul>
+        })}
 
       </div>
 
     </div>
-  );
+  </div>
+);
 }
 
 export default TaskList;

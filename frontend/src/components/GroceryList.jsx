@@ -8,7 +8,7 @@ function GroceryList() {
   const loadGroceries = async () => {
     const res = await fetch("http://localhost:5000/api/groceries");
     const data = await res.json();
-    setGroceries(data);
+    setGroceries(data || []);
   };
 
   useEffect(() => {
@@ -16,6 +16,7 @@ function GroceryList() {
   }, []);
 
   const addItem = async () => {
+    if (!item.trim()) return;
 
     await fetch("http://localhost:5000/api/groceries", {
       method: "POST",
@@ -30,7 +31,6 @@ function GroceryList() {
   };
 
   const deleteItem = async (id) => {
-
     await fetch(`http://localhost:5000/api/groceries/${id}`, {
       method: "DELETE"
     });
@@ -39,52 +39,81 @@ function GroceryList() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="relative min-h-screen text-white">
 
-      <h1 className="text-3xl font-bold">Groceries</h1>
-
-      <div className="flex gap-3">
-
-        <input
-          className="border p-2 rounded w-64"
-          value={item}
-          onChange={(e) => setItem(e.target.value)}
-          placeholder="Add grocery"
-        />
-
-        <button
-          onClick={addItem}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Add
-        </button>
-
+      {/* Aurora */}
+      <div className="aurora-container">
+        <div className="aurora aurora1"></div>
+        <div className="aurora aurora2"></div>
+        <div className="aurora aurora3"></div>
       </div>
 
-      <div className="space-y-2">
+      <div className="relative z-10 p-6 space-y-6">
 
-        {groceries.map((g) => (
+        <h1 className="text-3xl font-bold">Grocery List 🛒</h1>
 
-          <div
-            key={g._id}
-            className="flex justify-between bg-white p-3 rounded shadow"
+        {/* Input */}
+        <div className="flex gap-3 items-center">
+
+          <input
+            className="bg-primary backdrop-blur-lg p-3 rounded-lg w-64 outline-none 
+                       focus:ring-2 focus:ring-pink-300 transition"
+            value={item}
+            onChange={(e) => setItem(e.target.value)}
+            placeholder="Add something yummy... 🥑"
+          />
+
+          <button
+            onClick={addItem}
+            className="bg-button px-4 py-2 rounded-lg shadow 
+                       hover:scale-105 transition"
           >
+            Add
+          </button>
 
-            <span>{g.name}</span>
+        </div>
 
-            <button
-              onClick={() => deleteItem(g._id)}
-              className="text-red-500"
-            >
-              Remove
-            </button>
-
+        {/* Empty State */}
+        {groceries.length === 0 && (
+          <div className="text-center text-text mt-10">
+            <p className="text-lg">✨ Your kitchen is empty</p>
+            <p className="text-sm mt-2">
+              Add items and let AI suggest meals 💡
+            </p>
           </div>
+        )}
 
-        ))}
+        {/* Grocery Cards */}
+        <div className="grid grid-cols-2 gap-4">
+
+          {groceries.map((g, index) => (
+
+            <div
+              key={g._id}
+              style={{ animationDelay: `${index * 0.05}s` }}
+              className="animate-fadeIn bg-primary backdrop-blur-lg p-4 rounded-xl shadow 
+                         flex justify-between items-center 
+                         hover:scale-105 transition duration-300"
+            >
+
+              <span className="text-lg flex items-center gap-2">
+                🛒 {g.name}
+              </span>
+
+              <button
+                onClick={() => deleteItem(g._id)}
+                className="text-red-400 hover:text-red-600 transition text-lg"
+              >
+                ✕
+              </button>
+
+            </div>
+
+          ))}
+
+        </div>
 
       </div>
-
     </div>
   );
 }
