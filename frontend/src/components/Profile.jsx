@@ -1,138 +1,162 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function Profile() {
 
-  const [profile, setProfile] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-
-  const [form, setForm] = useState({
+  const [profile, setProfile] = useState({
     name: "",
-    email: "",
-    avatar: ""
+    age: "",
+    height: "",
+    weight: "",
+    preference: "vegetarian",
+    allergies: "",
+    goal: ""
   });
 
-  const loadProfile = async () => {
+  const handleChange = (e) => {
+    setProfile({
+      ...profile,
+      [e.target.name]: e.target.value
+    });
+  };
 
-  const token = localStorage.getItem("token");
-
-  const res = await fetch("http://localhost:5000/api/profile", {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-
-  const data = await res.json();
-
-  setProfile(data);
-  setForm(data);
-};
-
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const handleSave = async () => {
-
-  const token = localStorage.getItem("token");
-
-  await fetch("http://localhost:5000/api/profile", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(form)
-  });
-
-  setEditMode(false);
-  loadProfile();
-};
+  const saveProfile = () => {
+    console.log(profile);
+  };
 
   return (
-    <div className="relative min-h-screen text-white">
-
-      {/* Aurora */}
+    <div className="relative min-h-screen text-text-dark">
+      {/* Aurora Background */}
       <div className="aurora-container">
         <div className="aurora aurora1"></div>
         <div className="aurora aurora2"></div>
         <div className="aurora aurora3"></div>
       </div>
 
-      <div className="relative z-10 p-6 flex justify-center">
+      {/* Page Content */}
+      <div className="relative z-10 space-y-6 p-6">
 
-        <div className="bg-primary backdrop-blur-lg p-8 rounded-xl shadow w-[400px]">
+        {/* CARD */}
+        <div className="bg-primary/70 backdrop-blur-xl border border-white/10
+                        rounded-2xl shadow-xl p-8 w-full">
 
-          {/* Avatar */}
-          <div className="flex justify-center mb-4">
-            <img
-              src={form.avatar || "/panda.png"}
-              alt="avatar"
-              className="w-24 h-24 rounded-full object-cover border-4 border-white/20"
-            />
-          </div>
+          <div className="grid grid-cols-3 gap-4">
 
-          {/* Name */}
-          <div className="space-y-4">
+            {/* NAME */}
+            <div className="col-span-2">
+              <label className="text-sm text-text">Name</label>
+              <input
+                name="name"
+                value={profile.name}
+                onChange={handleChange}
+                className="w-full mt-2 p-3 rounded-xl
+                           bg-white/10 border border-white/10
+                           focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
 
-            <input
-              disabled={!editMode}
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full p-3 rounded-lg bg-white/20 outline-none"
-              placeholder="Name"
-            />
+            {/* AGE */}
+            <div>
+              <label className="text-sm text-text">Age</label>
+              <input
+                type="number"
+                name="age"
+                value={profile.age}
+                onChange={handleChange}
+                className="w-full mt-2 p-3 rounded-xl
+                           bg-white/10 border border-white/10
+                           focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
 
-            <input
-              disabled={!editMode}
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full p-3 rounded-lg bg-white/20 outline-none"
-              placeholder="Email"
-            />
+            {/* HEIGHT */}
+            <div>
+              <label className="text-sm text-text">Height (cm)</label>
+              <input
+                type="number"
+                name="height"
+                value={profile.height}
+                onChange={handleChange}
+                className="w-full mt-2 p-3 rounded-xl
+                           bg-white/10 border border-white/10
+                           focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
 
-            <input
-              disabled={!editMode}
-              value={form.avatar}
-              onChange={(e) => setForm({ ...form, avatar: e.target.value })}
-              className="w-full p-3 rounded-lg bg-white/20 outline-none"
-              placeholder="Avatar URL"
-            />
+            {/* WEIGHT */}
+            <div>
+              <label className="text-sm text-text">Weight (kg)</label>
+              <input
+                type="number"
+                name="weight"
+                value={profile.weight}
+                onChange={handleChange}
+                className="w-full mt-2 p-3 rounded-xl
+                           bg-white/10 border border-white/10
+                           focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
 
-          </div>
-
-          {/* Buttons */}
-          <div className="flex justify-center gap-3 mt-6">
-
-            {editMode ? (
-              <>
-                <button
-                  onClick={handleSave}
-                  className="bg-button px-4 py-2 rounded-lg hover:scale-105 transition"
-                >
-                  Save 💖
-                </button>
-
-                <button
-                  onClick={() => setEditMode(false)}
-                  className="bg-white/20 px-4 py-2 rounded-lg"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={() => setEditMode(true)}
-                className="bg-button px-4 py-2 rounded-lg hover:scale-105 transition"
+            {/* DIET */}
+            <div>
+              <label className="text-sm text-text">Eating Preference</label>
+              <select
+                name="preference"
+                value={profile.preference}
+                onChange={handleChange}
+                className="w-full mt-2 p-3 rounded-xl
+                           bg-white/10 border border-white/10
+                           focus:outline-none"
               >
-                Edit Profile ✏️
-              </button>
-            )}
+                <option value="vegetarian">Vegetarian</option>
+                <option value="nonveg">Non‑Vegetarian</option>
+                <option value="vegan">Vegan</option>
+              </select>
+            </div>
+
+            {/* GOAL */}
+            <div className="col-span-2">
+              <label className="text-sm text-text">Health Goal</label>
+              <input
+                name="goal"
+                placeholder="Weight loss / muscle gain / healthy eating"
+                value={profile.goal}
+                onChange={handleChange}
+                className="w-full mt-2 p-3 rounded-xl
+                           bg-white/10 border border-white/10
+                           focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
+
+            {/* ALLERGIES */}
+            <div className="col-span-2">
+              <label className="text-sm text-text">Allergies</label>
+              <textarea
+                name="allergies"
+                value={profile.allergies}
+                onChange={handleChange}
+                placeholder="Peanuts, dairy, gluten..."
+                className="w-full mt-2 p-3 rounded-xl
+                           bg-white/10 border border-white/10
+                           focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
 
           </div>
+
+          {/* SAVE BUTTON */}
+          <button
+            onClick={saveProfile}
+            className="mt-8 px-6 py-3 rounded-xl
+                       bg-button hover:bg-white/20
+                       transition font-medium"
+          >
+            Save Profile
+          </button>
 
         </div>
 
       </div>
+
     </div>
   );
 }

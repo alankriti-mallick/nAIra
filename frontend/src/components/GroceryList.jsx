@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { playHover } from "../utils/sound";
 
 function GroceryList() {
-
   const [groceries, setGroceries] = useState([]);
   const [item, setItem] = useState("");
 
@@ -21,9 +21,9 @@ function GroceryList() {
     await fetch("http://localhost:5000/api/groceries", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: item })
+      body: JSON.stringify({ name: item }),
     });
 
     setItem("");
@@ -32,15 +32,14 @@ function GroceryList() {
 
   const deleteItem = async (id) => {
     await fetch(`http://localhost:5000/api/groceries/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
 
     loadGroceries();
   };
 
   return (
-    <div className="relative min-h-screen text-white">
-
+    <div className="relative min-h-screen text-text-dark">
       {/* Aurora */}
       <div className="aurora-container">
         <div className="aurora aurora1"></div>
@@ -49,12 +48,8 @@ function GroceryList() {
       </div>
 
       <div className="relative z-10 p-6 space-y-6">
-
-        <h1 className="text-3xl font-bold">Grocery List 🛒</h1>
-
         {/* Input */}
         <div className="flex gap-3 items-center">
-
           <input
             className="bg-primary backdrop-blur-lg p-3 rounded-lg w-64 outline-none 
                        focus:ring-2 focus:ring-pink-300 transition"
@@ -67,10 +62,10 @@ function GroceryList() {
             onClick={addItem}
             className="bg-button px-4 py-2 rounded-lg shadow 
                        hover:scale-105 transition"
+            onMouseEnter={playHover}
           >
             Add
           </button>
-
         </div>
 
         {/* Empty State */}
@@ -85,17 +80,15 @@ function GroceryList() {
 
         {/* Grocery Cards */}
         <div className="grid grid-cols-2 gap-4">
-
           {groceries.map((g, index) => (
-
             <div
               key={g._id}
               style={{ animationDelay: `${index * 0.05}s` }}
               className="animate-fadeIn bg-primary backdrop-blur-lg p-4 rounded-xl shadow 
                          flex justify-between items-center 
-                         hover:scale-105 transition duration-300"
+                         hover:scale-101 transition duration-300"
+              onMouseEnter={playHover}
             >
-
               <span className="text-lg flex items-center gap-2">
                 🛒 {g.name}
               </span>
@@ -106,13 +99,9 @@ function GroceryList() {
               >
                 ✕
               </button>
-
             </div>
-
           ))}
-
         </div>
-
       </div>
     </div>
   );

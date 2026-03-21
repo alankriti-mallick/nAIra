@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SkeletonCard from "./SkeletonCard";
 import { getTasks } from "../services/api";
+import { playHover } from "../utils/sound";
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -8,7 +9,6 @@ function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [advice, setAdvice] = useState("");
   const [timeSaved, setTimeSaved] = useState(null);
-  const [meals, setMeals] = useState([]);
 
   const [loadingAI, setLoadingAI] = useState(true);
 
@@ -32,7 +32,6 @@ function Dashboard() {
         });
 
         const aiMealData = await aiMealRes.json();
-        setMeals(aiMealData);
 
         // GET TASKS FROM TASK LIST AND SORT BY PRIORITY
         const allTasks = await getTasks();
@@ -50,7 +49,7 @@ function Dashboard() {
           },
           body: JSON.stringify({
             energyLevel: calendarData.energyLevel,
-            meals,
+            meals: aiMealData.meals,
           }),
         });
 
@@ -70,7 +69,7 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="relative min-h-screen text-white">
+    <div className="relative min-h-screen text-text-dark">
       {/* Aurora Background */}
       <div className="aurora-container">
         <div className="aurora aurora1"></div>
@@ -80,8 +79,6 @@ function Dashboard() {
 
       {/* Page Content */}
       <div className="relative z-10 space-y-6 p-6">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-
         {/* TOP SECTION */}
 
         <div className="grid grid-cols-3 gap-6">
@@ -91,7 +88,7 @@ function Dashboard() {
             {/* LEFT CONTENT */}
             <div className="flex flex-col justify-evenly h-full">
               <div>
-                <h2 className="text-2xl font-bold mb-2">Hello Naira 👋</h2>
+                <h2 className="text-2xl font-bold mb-2">Hello Anjali 👋</h2>
 
                 <p className="text-text text-sm">
                   Your AI life assistant is ready to help today.
@@ -111,6 +108,7 @@ function Dashboard() {
                   href="https://calendar.google.com"
                   target="_blank"
                   className="bg-button px-4 py-2 rounded-lg text-sm shadow hover:bg-gray-100 transition"
+                  onMouseEnter={playHover}
                 >
                   📅 Calendar
                 </a>
@@ -119,6 +117,7 @@ function Dashboard() {
                   href="https://music.youtube.com"
                   target="_blank"
                   className="bg-button px-4 py-2 rounded-lg text-sm shadow hover:bg-gray-100 transition"
+                  onMouseEnter={playHover}
                 >
                   🎵 Music
                 </a>
@@ -228,13 +227,13 @@ function Dashboard() {
                       task.priority === 3
                         ? "bg-[#D14D72] text-text-light"
                         : task.priority === 2
-                          ? "bg-[#FFABAB] text-text-light"
-                          : "bg-[#FCC8D1] text-text-light";
+                          ? "bg-[#FFABAB] text-text-dark"
+                          : "bg-[#FCC8D1] text-text-dark";
 
                     return (
                       <li
                         key={task._id}
-                        className="bg-button p-2 rounded text-sm flex justify-between"
+                        className="p-2 text-sm flex justify-between"
                       >
                         <span>
                           {index + 1}. {task.title}
