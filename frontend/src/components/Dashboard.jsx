@@ -27,7 +27,7 @@ function Dashboard() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            energyLevel: calendarData.energyLevel
+            energyLevel: calendarData.energyLevel,
           }),
         });
 
@@ -36,8 +36,10 @@ function Dashboard() {
 
         // GET TASKS FROM TASK LIST AND SORT BY PRIORITY
         const allTasks = await getTasks();
-        const incompleteTasks = allTasks.filter(task => !task.completed);
-        const sortedTasks = incompleteTasks.sort((a, b) => b.priority - a.priority);
+        const incompleteTasks = allTasks.filter((task) => !task.completed);
+        const sortedTasks = incompleteTasks.sort(
+          (a, b) => b.priority - a.priority,
+        );
         setTasks(sortedTasks);
 
         // GET DASHBOARD DATA BASED ON MEALS AND ENERGY LEVEL
@@ -48,7 +50,7 @@ function Dashboard() {
           },
           body: JSON.stringify({
             energyLevel: calendarData.energyLevel,
-            meals
+            meals,
           }),
         });
 
@@ -68,113 +70,202 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-
-      {/* Calendar Metrics */}
-
-      <div className="grid grid-cols-4 gap-6">
-        {!data ? (
-          <>
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-          </>
-        ) : (
-          <>
-            <div className="bg-primary p-5 rounded-xl shadow">
-              <h3 className="text-text">Meetings</h3>
-              <p className="text-2xl font-bold">{data.meetingCount}</p>
-            </div>
-
-            <div className="bg-primary p-5 rounded-xl shadow">
-              <h3 className="text-text">Meeting Hours</h3>
-              <p className="text-2xl font-bold">{data.meetingHours}</p>
-            </div>
-
-            <div className="bg-primary p-5 rounded-xl shadow">
-              <h3 className="text-text">Free Hours</h3>
-              <p className="text-2xl font-bold">{data.freeHours}</p>
-            </div>
-
-            <div className="bg-primary p-5 rounded-xl shadow">
-              <h3 className="text-text">Energy Level</h3>
-              <p className="text-2xl font-bold">{data.energyLevel}</p>
-            </div>
-          </>
-        )}
+    <div className="relative min-h-screen text-white">
+      {/* Aurora Background */}
+      <div className="aurora-container">
+        <div className="aurora aurora1"></div>
+        <div className="aurora aurora2"></div>
+        <div className="aurora aurora3"></div>
       </div>
 
-      <div className="bg-primary shadow rounded-xl p-5">
-        <h2 className="text-lg font-semibold">Time Saved Today</h2>
-        {loadingAI ? (
-          <SkeletonCard />
-        ) : (<>
-            <p className="text-2xl mt-2 font-bold">{timeSaved} mins</p>
-            <p className="text-sm text-text">
-              Weekly: ~{timeSaved ? timeSaved * 7 : 0} mins saved
-            </p>
-          </>
-        )}
-      </div>
+      {/* Page Content */}
+      <div className="relative z-10 space-y-6 p-6">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
 
-      {/* AI Section */}
+        {/* TOP SECTION */}
 
-      <div className="grid grid-cols-3 gap-6">
-        {/* Meal Suggestion */}
+        <div className="grid grid-cols-3 gap-6">
+          {/* HELLO CARD */}
 
-        <div className="bg-primary shadow rounded-xl p-5">
-          <h2 className="text-lg font-semibold">Meal Suggestion</h2>
+          <div className="col-span-2 bg-primary p-6 backdrop-blur-lg rounded-xl shadow flex justify-between items-center">
+            {/* LEFT CONTENT */}
+            <div className="flex flex-col justify-evenly h-full">
+              <div>
+                <h2 className="text-2xl font-bold mb-2">Hello Naira 👋</h2>
 
-          {loadingAI ? (
-            <SkeletonCard />
-          ) : (
-            <>
-              <p className="mt-2 text-xl font-semibold">{meal?.name}</p>
-              <p className="text-text">Prep Time: {meal?.prepTime} mins</p>
-              <p className="text-text text-sm mt-1">{meal?.reason}</p>
-            </>
-          )}
+                <p className="text-text text-sm">
+                  Your AI life assistant is ready to help today.
+                </p>
+                <p className="text-sm text-text mt-2">
+                  Today looks{" "}
+                  {data?.energyLevel === "low"
+                    ? "like a light day"
+                    : "productive"}
+                  . Your AI assistant has optimized your meals and tasks.
+                </p>
+              </div>
+
+              {/* QUICK ACTIONS (moved higher) */}
+              <div className="flex gap-3">
+                <a
+                  href="https://calendar.google.com"
+                  target="_blank"
+                  className="bg-button px-4 py-2 rounded-lg text-sm shadow hover:bg-gray-100 transition"
+                >
+                  📅 Calendar
+                </a>
+
+                <a
+                  href="https://music.youtube.com"
+                  target="_blank"
+                  className="bg-button px-4 py-2 rounded-lg text-sm shadow hover:bg-gray-100 transition"
+                >
+                  🎵 Music
+                </a>
+              </div>
+            </div>
+
+            {/* IMAGE / ILLUSTRATION */}
+            <div className="hidden md:block">
+              <img
+                src="/panda.png"
+                alt="panda"
+                className="w-80 h-80 object-contain"
+              />
+            </div>
+          </div>
+
+          {/* CALENDAR METRICS COLUMN */}
+
+          <div className="flex flex-col gap-4">
+            {!data ? (
+              <>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </>
+            ) : (
+              <>
+                <div className="bg-primary p-4 rounded-xl shadow">
+                  <h3 className="text-text text-sm">Meetings</h3>
+                  <p className="text-xl font-bold">{data.meetingCount}</p>
+                </div>
+
+                <div className="bg-primary p-4 rounded-xl shadow">
+                  <h3 className="text-text text-sm">Meeting Hours</h3>
+                  <p className="text-xl font-bold">{data.meetingHours}</p>
+                </div>
+
+                <div className="bg-primary p-4 rounded-xl shadow">
+                  <h3 className="text-text text-sm">Free Hours</h3>
+                  <p className="text-xl font-bold">{data.freeHours}</p>
+                </div>
+
+                <div className="bg-primary p-4 rounded-xl shadow">
+                  <h3 className="text-text text-sm">Energy Level</h3>
+                  <p className="text-xl font-bold">{data.energyLevel}</p>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
-        {/* Task Priority */}
+        {/* BOTTOM GRID */}
 
-        <div className="bg-primary shadow rounded-xl p-5">
-          <h2 className="text-lg font-semibold">Task Priority</h2>
+        <div className="grid grid-cols-4 gap-6">
+          {/* TIME SAVED */}
 
-          {loadingAI ? (
-            <SkeletonCard />
-          ) : (
-            <ul className="mt-2 space-y-2">
-              {tasks.length > 0 ? (
-                tasks.slice(0, 3).map((task, index) => {
-                  const priorityLabel = task.priority === 3 ? "High" : task.priority === 2 ? "Medium" : "Low";
-                  const priorityColor = task.priority === 3 ? "bg-red-100 text-red-800" : task.priority === 2 ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800";
-                  return (
-                    <li key={task._id} className="bg-white p-2 rounded text-sm flex justify-between items-center">
-                      <span>{index + 1}. {task.title}</span>
-                      <span className={`text-xs px-2 py-1 rounded ${priorityColor}`}>{priorityLabel}</span>
-                    </li>
-                  );
-                })
-              ) : (
-                <p className="text-text text-sm">No tasks available</p>
-              )}
-            </ul>
-          )}
-        </div>
+          <div className="bg-primary shadow rounded-xl p-5">
+            <h2 className="text-lg font-semibold">Time Saved</h2>
 
-        {/* AI Advice */}
+            {loadingAI ? (
+              <SkeletonCard />
+            ) : (
+              <>
+                <p className="text-2xl mt-2 font-bold">{timeSaved} mins</p>
+                <p className="text-sm text-text">
+                  Weekly: ~{timeSaved ? timeSaved * 7 : 0} mins
+                </p>
+              </>
+            )}
+          </div>
 
-        <div className="bg-primary shadow rounded-xl p-5">
-          <h2 className="text-lg font-semibold">AI Advice</h2>
+          {/* MEAL */}
 
-          {loadingAI ? (
-            <SkeletonCard />
-          ) : (
-            <p className="mt-2 text-text">{advice}</p>
-          )}
+          <div className="bg-primary shadow rounded-xl p-5">
+            <h2 className="text-lg font-semibold">Meal Suggestion</h2>
+
+            {loadingAI ? (
+              <SkeletonCard />
+            ) : (
+              <>
+                <p className="mt-2 text-xl font-semibold">{meal?.name}</p>
+                <p className="text-text">Prep: {meal?.prepTime} mins</p>
+              </>
+            )}
+          </div>
+
+          {/* TASKS */}
+
+          <div className="bg-primary shadow rounded-xl p-5">
+            <h2 className="text-lg font-semibold">Top Tasks</h2>
+
+            {loadingAI ? (
+              <SkeletonCard />
+            ) : (
+              <ul className="mt-2 space-y-2">
+                {tasks.length > 0 ? (
+                  tasks.slice(0, 3).map((task, index) => {
+                    const priorityLabel =
+                      task.priority === 3
+                        ? "High"
+                        : task.priority === 2
+                          ? "Medium"
+                          : "Low";
+
+                    const priorityColor =
+                      task.priority === 3
+                        ? "bg-[#D14D72] text-text-light"
+                        : task.priority === 2
+                          ? "bg-[#FFABAB] text-text-light"
+                          : "bg-[#FCC8D1] text-text-light";
+
+                    return (
+                      <li
+                        key={task._id}
+                        className="bg-button p-2 rounded text-sm flex justify-between"
+                      >
+                        <span>
+                          {index + 1}. {task.title}
+                        </span>
+
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${priorityColor}`}
+                        >
+                          {priorityLabel}
+                        </span>
+                      </li>
+                    );
+                  })
+                ) : (
+                  <p className="text-sm text-text">No tasks</p>
+                )}
+              </ul>
+            )}
+          </div>
+
+          {/* AI ADVICE */}
+
+          <div className="bg-primary shadow rounded-xl p-5">
+            <h2 className="text-lg font-semibold">AI Advice</h2>
+
+            {loadingAI ? (
+              <SkeletonCard />
+            ) : (
+              <p className="mt-2 text-text text-sm">{advice}</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

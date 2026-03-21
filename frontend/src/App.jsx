@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-6 bg-dark-bg min-h-screen">
+      <div className="flex-1 p-6min-h-screen">
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />

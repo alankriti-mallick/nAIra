@@ -7,7 +7,7 @@ function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className={`h-screen bg-gray-900 text-white flex flex-col justify-between transition-all duration-300 
+    <div className={`h-screen bg-navbar text-white flex flex-col justify-between transition-all duration-300 
     ${collapsed ? "w-20" : "w-64"}`}>
 
       {/* Top Section */}
