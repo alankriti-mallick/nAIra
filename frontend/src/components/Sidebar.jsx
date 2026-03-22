@@ -9,6 +9,8 @@ import {
   User,
 } from "lucide-react";
 
+import naira from "/naira_logo.png"
+
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
@@ -74,7 +76,7 @@ function Sidebar() {
     ${collapsed ? "w-0 opacity-0" : "w-36 opacity-100"}`}
           >
             <img
-              src="/naira_logo.png"
+              src={naira}
               alt="nAIra"
               className="h-8 w-auto object-contain"
             />

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SkeletonCard from "./SkeletonCard";
 import { getTasks } from "../services/api";
 import { playHover } from "../utils/sound";
+import panda from "/panda.png"
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -127,7 +128,7 @@ function Dashboard() {
             {/* IMAGE / ILLUSTRATION */}
             <div className="hidden md:block">
               <img
-                src="/panda.png"
+                src={panda}
                 alt="panda"
                 className="w-80 h-80 object-contain"
               />

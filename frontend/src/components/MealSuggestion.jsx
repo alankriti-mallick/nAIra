@@ -126,7 +126,7 @@ function MealSuggestion() {
       {selectedRecipe && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div
-            className="bg-primary backdrop-blur-lg w-125 max-h-[80vh]
+            className="bg-secondary backdrop-blur-lg w-125 max-h-[80vh]
                         overflow-y-auto p-6 rounded-xl shadow-xl
                         scroll-smooth"
           >
