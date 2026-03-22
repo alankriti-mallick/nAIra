@@ -1,4 +1,4 @@
 export const getCalendarData = async () => {
-    const response = await fetch("http://localhost:5000/api/calendar/today");
+    const response = await fetch("https://naira-83jk.onrender.com/api/calendar/today");
     return response.json();
 };

@@ -6,7 +6,7 @@ function GroceryList() {
   const [item, setItem] = useState("");
 
   const loadGroceries = async () => {
-    const res = await fetch("http://localhost:5000/api/groceries");
+    const res = await fetch("https://naira-83jk.onrender.com/api/groceries");
     const data = await res.json();
     setGroceries(data || []);
   };
@@ -18,7 +18,7 @@ function GroceryList() {
   const addItem = async () => {
     if (!item.trim()) return;
 
-    await fetch("http://localhost:5000/api/groceries", {
+    await fetch("https://naira-83jk.onrender.com/api/groceries", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ function GroceryList() {
   };
 
   const deleteItem = async (id) => {
-    await fetch(`http://localhost:5000/api/groceries/${id}`, {
+    await fetch(`https://naira-83jk.onrender.com/api/groceries/${id}`, {
       method: "DELETE",
     });
 
