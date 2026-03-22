@@ -12,10 +12,10 @@ function MealSuggestion() {
   useEffect(() => {
     const loadMeals = async () => {
       try {
-        const calendarRes = await fetch("http://localhost:5000/api/calendar");
+        const calendarRes = await fetch("https://naira-83jk.onrender.com/api/calendar");
         const calendarData = await calendarRes.json();
 
-        const aiRes = await fetch("http://localhost:5000/api/ai/meals", {
+        const aiRes = await fetch("https://naira-83jk.onrender.com/api/ai/meals", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -41,7 +41,7 @@ function MealSuggestion() {
     try {
       setLoadingRecipe(true);
 
-      const res = await fetch("http://localhost:5000/api/recipe", {
+      const res = await fetch("https://naira-83jk.onrender.com/api/recipe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

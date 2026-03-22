@@ -15,13 +15,13 @@ function Dashboard() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const calendarRes = await fetch("http://localhost:5000/api/calendar");
+        const calendarRes = await fetch("https://naira-83jk.onrender.com/api/calendar");
         const calendarData = await calendarRes.json();
 
         setData(calendarData);
 
         // GET MEALS BY GROCERY LIST
-        const aiMealRes = await fetch("http://localhost:5000/api/ai/meals", {
+        const aiMealRes = await fetch("https://naira-83jk.onrender.com/api/ai/meals", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -42,7 +42,7 @@ function Dashboard() {
         setTasks(sortedTasks);
 
         // GET DASHBOARD DATA BASED ON MEALS AND ENERGY LEVEL
-        const aiRes = await fetch("http://localhost:5000/api/ai/plan", {
+        const aiRes = await fetch("https://naira-83jk.onrender.com/api/ai/plan", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
