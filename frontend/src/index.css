@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-bg: #fcf8f8;
+  --color-primary: #fcc8d166;
+  --color-secondary: #f9dfdf;
+  --color-filler: #be5985;
+  --color-text: #850e35;
+  --color-navbar: #ec7fa9;
+  --color-button: #fcc8d1;
+  --color-text-light: #fef2f4;
+  --color-button-2: #ee6983;
+  --color-text-dark: #be5985;
+}
+
+* {
+  font-family: "Outfit", sans-serif;
+}
+
+/* Aurora background */
+
+.aurora-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.aurora {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.6;
+  animation: auroraMove 5s infinite alternate ease-in-out;
+}
+
+.aurora1 {
+  background: #fef2f4;
+  top: -10%;
+  left: -10%;
+}
+
+.aurora2 {
+  background: #ee6983;
+  top: 40%;
+  right: -20%;
+  animation-delay: 1s;
+}
+
+.aurora3 {
+  background: #fcc8d1;
+  bottom: -20%;
+  left: 30%;
+  animation-delay: 3s;
+}
+
+@keyframes auroraMove {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(120px, -80px) scale(1.2);
+  }
+  100% {
+    transform: translate(-80px, 100px) scale(1);
+  }
+}
+
+/* Modern UI Scrollbar */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* invisible track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.08)
+  );
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0.15)
+  );
+}
